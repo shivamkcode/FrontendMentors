@@ -5,7 +5,7 @@ import "./App.css";
 import searchIcon from "./assets/images/icon-search.svg";
 import playIcon from "./assets/images/icon-play.svg";
 import newWindowIcon from './assets/images/icon-new-window.svg'
-import NavBar from "./components/navBar";
+import NavBar from "./components/NavBar";
 // import Meaning from './components/meaning'
 
 const Dictionary = () => {
