@@ -2,44 +2,40 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
 //Icons
-import DictionaryIcon from "./assets/images/logo.svg";
-import dropDownIcon from "./assets/images/icon-arrow-down.svg";
-import moonIcon from "./assets/images/icon-moon.svg";
 import searchIcon from "./assets/images/icon-search.svg";
 import playIcon from "./assets/images/icon-play.svg";
 import newWindowIcon from './assets/images/icon-new-window.svg'
+import NavBar from "./components/navBar";
 // import Meaning from './components/meaning'
 
 const Dictionary = () => {
   const [font, setFont] = useState("serif");
-  const [isOpen, setIsOpen] = useState(false);
   const [word, setWord] = useState("Dictionary");
-  const [isOn, setIsOn] = useState(false);
   const [data, setData] = useState("");
   const [audio, setAudio] = useState("");
+  const [isOn, setIsOn] = useState(false);
+
+
 
   const fetchWord = async () => {
     const response = await axios.get(
       `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
     );
     setData(response.data);
-    console.log(response.data[0]);
     return response.data;
-  };
+  }; 
+
+  useEffect(()=> {
+    handleSearch()
+  }, [])
 
   const handleSearch = async (e) => {
-    e.preventDefault();
+    e?.preventDefault();
     const fetchedData = await fetchWord();
     handleAudioLink(fetchedData);
   };
 
-  const toggle = () => {
-    setIsOn(!isOn);
-  };
-
-  const toggleOpen = () => {
-    setIsOpen(!isOpen);
-  };
+  
 
   const handleAudioLink = (data) => {
     const phonetics = data[0].phonetics;
@@ -56,33 +52,10 @@ const Dictionary = () => {
     audioEl.play();
   };
 
+
   return (
-    <div className="dictionary" style={{ fontFamily: font }}>
-      <nav>
-        <img src={DictionaryIcon} alt="DictionaryIcon" />
-        <div>
-        <h3>{font}</h3>
-        <img onClick={toggleOpen} src={dropDownIcon} alt="dropDownIcon" />
-        {isOpen && (
-          <ul style={{ listStyleType: "none" }}>
-            <li onClick={() => setFont("Serif")}>
-              <span>Serif</span>
-            </li>
-            <li onClick={() => setFont("sans-seif")}>
-              <span>Sans Serif</span>
-            </li>
-            <li onClick={() => setFont("monospace")}>
-              <span>Mono</span>
-            </li>
-          </ul>
-        )}
-        <label className="switch">
-          <input type="checkbox" checked={isOn} onChange={toggle} />
-          <span className="slider round"></span>
-        </label>
-        <img src={moonIcon} alt="moon-icon" />
-        </div>
-      </nav>
+    <div className={`dictionary`} style={{ fontFamily: font }}>
+      <NavBar font={font} setFont={setFont} setIsOn={setIsOn} isOn={isOn} />
       <div>
         <form onSubmit={handleSearch} action="submit">
           <input
