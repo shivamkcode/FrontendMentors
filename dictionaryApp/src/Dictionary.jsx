@@ -13,7 +13,7 @@ const Dictionary = () => {
   const [data, setData] = useState("");
   const [audio, setAudio] = useState("");
   const [isOn, setIsOn] = useState(false);
-  const [error, setError] = useState(null); // state for error
+  const [error, setError] = useState(null); 
 
   const fetchWord = async () => {
     try {
@@ -21,11 +21,11 @@ const Dictionary = () => {
             `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
         );
         setData(response.data);
-        setError(null); // reset error state if fetch is successful
+        setError(null); 
         return response.data;
     } catch (error) {
-        setData(null); // set data to null if an error occurs
-        setError(`Failed to fetch ${word}. Please check whether you have spelled it correctly and try again.`); // set error state with error message
+        setData(null); 
+        setError(`Failed to fetch ${word}. Please check whether you have spelled it correctly and try again.`); 
     }
   };
 
@@ -35,8 +35,8 @@ const Dictionary = () => {
 
   const handleSearch = async (e) => {
     e?.preventDefault();
-    setAudio(''); // reset audio state
-    setError(null); // reset error state
+    setAudio('');
+    setError(null); 
     const fetchedData = await fetchWord();
     handleAudioLink(fetchedData);
   };
@@ -73,7 +73,7 @@ const Dictionary = () => {
           <img onClick={handleSearch} src={searchIcon} alt="search-icon" />
         </form>
       </div>
-      {error && <h1 style={{color: 'red'}}>Error: {error}</h1>} {/* render error message if error state is not null */}
+      {error && <h1 style={{color: 'red'}}>Error: {error}</h1>}
       {data && (
         <>
           <div>
