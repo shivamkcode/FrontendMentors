@@ -4,19 +4,21 @@
   --secondary-color:white;
 }
 
-
 *{
     box-sizing: border-box;
 }
+
 body{
     padding: 0;
     margin: 0;
     background: var(--secondary-color);
     color: var(--primary-color);
+    padding-bottom: 50px;
 }
 
 .dictionary{
     width: 90vw;
+    max-width: 800px;
     margin: 0 auto;
 }
 
@@ -28,10 +30,14 @@ nav, form{
     justify-content: space-between;
 }
 
+nav{
+  margin: 20px auto;
+}
+
 nav>div{
     justify-content: space-around;
     align-items: center;
-    width: 20vw;
+    width: 300px;
 }
 
 nav ul{
@@ -122,4 +128,29 @@ form>input:focus{
     background-color: none;
 }
 
+h1{
+  font-size: 50px;
+}
+
+h5{
+  color: rgb(18, 141, 236);
+}
+
+div>h3{
+  font-size: 20px;
+}
+
+.meaning{
+  margin-top: 40px;
+}
+
+.partOfSpeech{
+  color: blueviolet;
+}
+
+@media screen and (max-width: 600px){
+  nav>div{
+    width: 200px;
+  }
+}
 

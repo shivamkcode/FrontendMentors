@@ -6,7 +6,6 @@ import searchIcon from "./assets/images/icon-search.svg";
 import playIcon from "./assets/images/icon-play.svg";
 import newWindowIcon from './assets/images/icon-new-window.svg'
 import NavBar from "./components/NavBar";
-// import Meaning from './components/meaning'
 
 const Dictionary = () => {
   const [font, setFont] = useState("serif");
@@ -14,16 +13,21 @@ const Dictionary = () => {
   const [data, setData] = useState("");
   const [audio, setAudio] = useState("");
   const [isOn, setIsOn] = useState(false);
-
-
+  const [error, setError] = useState(null); // state for error
 
   const fetchWord = async () => {
-    const response = await axios.get(
-      `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
-    );
-    setData(response.data);
-    return response.data;
-  }; 
+    try {
+        const response = await axios.get(
+            `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
+        );
+        setData(response.data);
+        setError(null); // reset error state if fetch is successful
+        return response.data;
+    } catch (error) {
+        setData(null); // set data to null if an error occurs
+        setError(`Failed to fetch ${word}. Please check whether you have spelled it correctly and try again.`); // set error state with error message
+    }
+  };
 
   useEffect(()=> {
     handleSearch()
@@ -31,19 +35,21 @@ const Dictionary = () => {
 
   const handleSearch = async (e) => {
     e?.preventDefault();
+    setAudio(''); // reset audio state
+    setError(null); // reset error state
     const fetchedData = await fetchWord();
     handleAudioLink(fetchedData);
   };
 
-  
-
   const handleAudioLink = (data) => {
-    const phonetics = data[0].phonetics;
-    for (let i = 0; i < phonetics.length; i++) {
-      if (phonetics[i].audio && phonetics[i].audio !== "") {
-        setAudio(phonetics[i].audio);
-        break;
-      }
+    if(data){
+      const phonetics = data[0]?.phonetics;
+      for (let i = 0; i < phonetics.length; i++) {
+        if (phonetics[i].audio && phonetics[i].audio !== "") {
+          setAudio(phonetics[i].audio);
+          break;
+        }
+    }
     }
   };
 
@@ -51,7 +57,6 @@ const Dictionary = () => {
     const audioEl = document.getElementsByClassName("audio-element")[0];
     audioEl.play();
   };
-
 
   return (
     <div className={`dictionary`} style={{ fontFamily: font }}>
@@ -68,50 +73,55 @@ const Dictionary = () => {
           <img onClick={handleSearch} src={searchIcon} alt="search-icon" />
         </form>
       </div>
-      <div>
-        <h1>{data[0]?.word}</h1>
-        <h5>{data[0]?.phonetics[1].text}</h5>
-      </div>
-      {audio && (
+      {error && <h1 style={{color: 'red'}}>Error: {error}</h1>} {/* render error message if error state is not null */}
+      {data && (
         <>
-          <img src={playIcon} onClick={playAudio} alt="play" />
-          <audio src={audio} className="audio-element"></audio>
-        </>
-      )}
-      <div>
-        {data[0]?.meanings.map((item, i) => (
-          <div key={i}>
-            <h3>{item.partOfSpeech}</h3>
-            <h3>Meaning</h3>
-            <ul>
-              {item.definitions.map((def, j) => (
-                <li key={j}>{def.definition}</li>
-              ))}
-            </ul>
-            {item.antonyms.length > 0 && (
-              <>
-                <h3>Antonyms</h3>
-                {item.antonyms.map((ant, k) => (
-                  <span key={k}>{ant}</span>
-                ))}
-              </>
-            )}
-            {item.synonyms.length > 0 && (
-              <>
-                <h3>Synonyms</h3>
-                {item.synonyms.map((syn, l) => (
-                  <span key={l}>{syn}</span>
-                ))}
-              </>
-            )}
+          <div>
+            <h1>{data[0]?.word}</h1>
+            <h5>{data[0]?.phonetics[0]?.text}</h5>
           </div>
-        ))}
-      </div>
-      {data[0]?.sourceUrls[0].length > 0 && (
-        <>
-          <span>Source: </span>
-          <a href={data[0]?.sourceUrls[0]}>{data[0]?.sourceUrls[0]}</a>
-          <span><img src={newWindowIcon} alt="newWindowIcon" /></span>
+          {audio && (
+            <>
+              <img src={playIcon} onClick={playAudio} alt="play" />
+              <audio src={audio} className="audio-element"></audio>
+            </>
+          )}
+          <div>
+            {data[0]?.meanings.map((item, i) => (
+              <div className="meaning" key={i}>
+                <h3 className="partOfSpeech">{item.partOfSpeech}</h3>
+                <h2>Meaning</h2>
+                <ul>
+                  {item.definitions.map((def, j) => (
+                    <li key={j}>{def.definition}</li>
+                  ))}
+                </ul>
+                {item.antonyms.length > 0 && (
+                  <>
+                    <h3>Antonyms</h3>
+                    {item.antonyms.map((ant, k) => (
+                      <span key={k}>{ant}</span>
+                    ))}
+                  </>
+                )}
+                {item.synonyms.length > 0 && (
+                  <>
+                    <h3>Synonyms</h3>
+                    {item.synonyms.map((syn, l) => (
+                      <span key={l}>{syn}</span>
+                    ))}
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+          {data[0]?.sourceUrls[0].length > 0 && (
+            <>
+              <span>Source: </span>
+              <a href={data[0]?.sourceUrls[0]}>{data[0]?.sourceUrls[0]}</a>
+              <span><img src={newWindowIcon} alt="newWindowIcon" /></span>
+            </>
+          )}
         </>
       )}
     </div>
