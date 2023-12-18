@@ -57,7 +57,7 @@ const Dictionary = () => {
     const audioEl = document.getElementsByClassName("audio-element")[0];
     audioEl.play();
   };
-
+ 
   return (
     <div className={`dictionary`} style={{ fontFamily: font }}>
       <NavBar font={font} setFont={setFont} setIsOn={setIsOn} isOn={isOn} />

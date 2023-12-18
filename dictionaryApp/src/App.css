@@ -1,6 +1,6 @@
 
 :root {
-  --primary-color: black;
+  --primary-color: #121212;
   --secondary-color:white;
 }
 
@@ -34,7 +34,7 @@ nav{
   margin: 20px auto;
 }
 
-nav>div{
+nav div{
     justify-content: space-around;
     align-items: center;
     width: 300px;
@@ -48,8 +48,13 @@ nav ul{
     list-style-position: inside;
 }
 
+nav img{
+  cursor: pointer;
+}
+
 nav ul li{
   margin: 10px;
+  border-bottom: 2px solid #8c0878;
 }
 
 .switch {
@@ -115,13 +120,14 @@ form{
     border-radius: 10px;
 }
 
-form>input{
+form input{
     color: var(--primary-color);
     flex-grow: 1;
     border: none;
     background: none;
     margin-right: 10px;
     outline: none;
+    caret-color: purple;
 }
 
 form>input:focus{

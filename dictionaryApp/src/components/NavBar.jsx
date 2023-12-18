@@ -9,11 +9,11 @@ const NavBar = (props) => {
   const toggle = () => {
     var r = document.querySelector(':root');
     if(props.isOn) {
-      r.style.setProperty('--primary-color', 'black');
+      r.style.setProperty('--primary-color', '#121212');
       r.style.setProperty('--secondary-color', 'white');
     } else {
       r.style.setProperty('--primary-color', 'white');
-      r.style.setProperty('--secondary-color', 'black');
+      r.style.setProperty('--secondary-color', '#121212');
     }
     props.setIsOn(!props.isOn);
   };
@@ -25,12 +25,14 @@ const NavBar = (props) => {
   
   return (
     <nav>
+      <a href="/">
       <img src={DictionaryIcon} alt="DictionaryIcon" />
+      </a>
       <div style={{position:'relative'}}>
         <h3>{props.font}</h3>
         <img onClick={toggleOpen} src={dropDownIcon} alt="dropDownIcon" />
         {isOpen && (
-          <ul style={{ listStyleType: "none",cursor:"pointer", position:"absolute", left:'12%', top:'60%' }}>
+          <ul style={{ listStyleType: "none",cursor:"pointer", position:"absolute", left:'20%', top:'60%' }}>
             <li onClick={() => props.setFont("serif")}>
               <span>Serif</span>
             </li>
